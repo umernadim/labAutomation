@@ -10,6 +10,18 @@ if (isset($_POST['submit'])) {
     $sql = "INSERT INTO cpri_test_results(cpri_test_id, test_date, status, remarks) VALUES ('{$cpri_test_id}', '{$test_date}', '{$result}', '{$remarks}')";
 
     if (mysqli_query($connect, $sql)) {
+
+        if($result == 'Passed')
+        {
+            $updateCPRITableQuery = "UPDATE `cpri_tests` SET `approved`='Approved' WHERE `id`= '$cpri_test_id'";
+
+            mysqli_query($connect,$updateCPRITableQuery);
+
+        }
+
+
+
+
         header("Location:cpri-test-records.php");
     } else {
         echo "<p style='color: red; text-align:center;'>Failed to submit test. Error: " . mysqli_error($connect) . "</p>";

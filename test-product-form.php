@@ -119,7 +119,7 @@ if (isset($_POST['submit'])) {
                                         <div class="form-group">
                                             <label for="exampleTestedBy">Tested By</label>
                                             <input type="text" class="form-control" id="exampleTestedBy" name="test_by"
-                                                placeholder="Tested by" required>
+                                               value="<?= $_SESSION["first_name"] ?>" placeholder="Tested by" required>
                                         </div>
                                         
                                         <div class="form-group">

@@ -84,6 +84,7 @@ if (isset($_POST['submit'])) {
                   <select class="form-control form-control-lg" name="role" id="exampleFormControlSelect2" Required>
                     <option disabled selected>Select user</option>
                     <option value="Admin">Admin</option>
+                    <option value="Tester">Tester</option>
                     <option value="Normal User">Normal User</option>
                   </select>
                 </div>

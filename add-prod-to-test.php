@@ -49,10 +49,18 @@ if (isset($_POST['addProduct'])) {
 
 <body>
   <div class="container-scroller">
-    <div class="container-fluid page-body-wrapper full-page-wrapper">
+    <!-------- navbar ---------->
+    <?php
+    include 'components/navBar.php';
+    ?>
+    <div class="container-fluid page-body-wrapper">
+      <!---------- sidebar --------->
+      <?php
+      include 'components/sideBar.php';
+      ?>
       <div class="content-wrapper d-flex align-items-center auth px-0">
         <div class="row w-100 mx-0">
-          <div class="col-lg-5 mx-auto">
+          <div class="col-lg-6 mx-auto">
             <div class="auth-form-light text-left py-5 px-4 px-sm-5">
               <h1 class="text-center text-primary mb-4">Add Product For Testing</h1>
 
@@ -67,45 +75,45 @@ if (isset($_POST['addProduct'])) {
 
                 if ($row1 = mysqli_fetch_assoc($result1)) {
                   ?>
-                  <form class="user" action="<?php echo $_SERVER['PHP_SELF'] . '?prodid=' . $id; ?>" method="post">
-                    <input type="hidden" name="id" value="<?php echo $row1['id']; ?>">
+              <form class="user" action="<?php echo $_SERVER['PHP_SELF'] . '?prodid=' . $id; ?>" method="post">
+                <input type="hidden" name="id" value="<?php echo $row1['id']; ?>">
 
-                    <div class="form-group row">
-                      <div class="col-sm-6 mb-3 mb-sm-0">
-                        <input type="text" class="form-control form-control-user" value="<?php echo $row1['type_name']; ?>"
-                          name="prodName" placeholder="Product Name" required>
-                      </div>
-                      <div class="col-sm-6">
-                        <input type="text" class="form-control form-control-user" value="<?php echo $row1['id']; ?>"
-                          name="prodTypeid" placeholder="Product Type ID" required>
-                      </div>
-                    </div>
+                <div class="form-group row">
+                  <div class="col-sm-6 mb-3 mb-sm-0">
+                    <input type="text" class="form-control form-control-user" value="<?php echo $row1['type_name']; ?>"
+                      name="prodName" placeholder="Product Name" required>
+                  </div>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control form-control-user" value="<?php echo $row1['id']; ?>"
+                      name="prodTypeid" placeholder="Product Type ID" required>
+                  </div>
+                </div>
 
-                    <div class="form-group row">
-                      <div class="col-sm-6 mb-3 mb-sm-0">
-                        <input type="text" class="form-control form-control-user" name="revsionCode"
-                          placeholder="Revision Code" maxlength="3" required>
-                      </div>
-                      <div class="col-sm-6">
-                        <input type="text" class="form-control form-control-user" name="mfgNumber" maxlength="3"
-                          placeholder="Manufactured Number" required>
-                      </div>
-                    </div>
+                <div class="form-group row">
+                  <div class="col-sm-6 mb-3 mb-sm-0">
+                    <input type="text" class="form-control form-control-user" name="revsionCode"
+                      placeholder="Revision Code" maxlength="3" required>
+                  </div>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control form-control-user" name="mfgNumber" maxlength="3"
+                      placeholder="Manufactured Number" required>
+                  </div>
+                </div>
 
-                    <div class="form-group row">
-                      <div class="col-sm-6 mb-3 mb-sm-0">
-                        <input type="date" class="form-control form-control-user" name="mfgDate"
-                          placeholder="Manufactured Date" required>
-                      </div>
-                      <div class="col-sm-6">
-                        <input type="text" class="form-control form-control-user" name="uploadedBy"
-                          placeholder="Uploaded By" required>
-                      </div>
-                    </div>
+                <div class="form-group row">
+                  <div class="col-sm-6 mb-3 mb-sm-0">
+                    <input type="date" class="form-control form-control-user" name="mfgDate"
+                      placeholder="Manufactured Date" required>
+                  </div>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control form-control-user" name="uploadedBy"
+                      placeholder="Uploaded By" value="<?= $_SESSION["first_name"] ?>" required>
+                  </div>
+                </div>
 
-                    <input type="submit" value="Add to Test" class="btn btn-primary btn-user btn-block" name="addProduct">
-                  </form>
-                  <?php
+                <input type="submit" value="Add to Test" class="btn btn-primary btn-user btn-block" name="addProduct">
+              </form>
+              <?php
                 } else {
                   echo "<p style='color:red;text-align:center;'>Invalid product type ID.</p>";
                 }

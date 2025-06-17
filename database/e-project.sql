@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 17, 2025 at 05:22 PM
+-- Generation Time: Jun 17, 2025 at 11:17 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,7 +41,9 @@ CREATE TABLE `cpri_tests` (
 
 INSERT INTO `cpri_tests` (`id`, `product_id`, `test_id`, `sent_at`, `approved`) VALUES
 (1, 'FMZ1400047', 'FMZ1-XX-0001', '2025-06-15 14:37:47', 'Pending'),
-(2, 'KAR1200072', 'KAR1-XX-0001', '2025-06-16 12:02:38', 'Pending');
+(3, 'TES3400987', 'TES3-XX-0001', '2025-06-17 12:27:17', 'Pending'),
+(4, 'RES2300876', 'RES2-XX-0001', '2025-06-17 12:56:21', 'Pending'),
+(5, 'BlB2300876', 'BlB2-XX-0001', '2025-06-17 13:37:30', 'Approved');
 
 -- --------------------------------------------------------
 
@@ -62,7 +64,23 @@ CREATE TABLE `cpri_test_results` (
 --
 
 INSERT INTO `cpri_test_results` (`id`, `cpri_test_id`, `test_date`, `status`, `remarks`) VALUES
-(2, 1, '2025-06-16', 'Passed', 'etgsfds');
+(2, 1, '2025-06-16', 'Passed', 'etgsfds'),
+(3, 4, '2025-06-17', 'Passed', 'kmlmsda'),
+(4, 5, '2025-06-17', 'Passed', 'nkksadas');
+
+--
+-- Triggers `cpri_test_results`
+--
+DELIMITER $$
+CREATE TRIGGER `update_approval_status` AFTER UPDATE ON `cpri_test_results` FOR EACH ROW BEGIN
+    IF NEW.status = 'passed' THEN
+        UPDATE cpri_tests
+        SET approved = 'approved'
+        WHERE test_id = NEW.cpri_test_id;
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -107,8 +125,9 @@ CREATE TABLE `products` (
 
 INSERT INTO `products` (`id`, `product_id`, `product_name`, `product_type_id`, `revision_code`, `manufacturing_number`, `manufactured_date`, `created_at`, `Uploaded_by`) VALUES
 (13, 'FMZ1400047', 'Fuse Model Z', 12, '14', '47', '2025-06-15', '2025-06-15 21:36:46', 'ali'),
-(15, 'KAR1200072', 'Karachi', 13, '12', '72', '2025-06-16', '2025-06-16 16:05:10', 'kamran'),
-(19, 'TES3400987', 'Test Product', 15, '34', '987', '2025-06-17', '2025-06-17 14:53:36', 'kamran');
+(19, 'TES3400987', 'Test Product', 15, '34', '987', '2025-06-17', '2025-06-17 14:53:36', 'kamran'),
+(21, 'RES2300876', 'Resistor', 17, '23', '876', '2025-06-17', '2025-06-17 19:53:46', 'umer'),
+(22, 'BlB2300876', 'Bulb', 18, '23', '876', '2025-06-17', '2025-06-17 20:37:05', 'umer');
 
 --
 -- Triggers `products`
@@ -164,8 +183,9 @@ CREATE TABLE `product_types` (
 
 INSERT INTO `product_types` (`id`, `type_name`, `code`) VALUES
 (12, 'Fuse Model Z', 'FMZ'),
-(13, 'Karachi', 'KAR'),
-(15, 'Test Product', 'TES');
+(15, 'Test Product', 'TES'),
+(17, 'Resistor', 'RES'),
+(18, 'Bulb', 'BlB');
 
 -- --------------------------------------------------------
 
@@ -188,7 +208,8 @@ CREATE TABLE `register` (
 
 INSERT INTO `register` (`user_id`, `first_name`, `last_name`, `email`, `password`, `role`) VALUES
 (7, 'umer', 'nadeem', 'umer@gmail.com', '6a8d11f37a9ece9ebc851ea11331160e', 'Admin'),
-(8, 'amir', 'salman', 'amir@gmail.com', '63eefbd45d89e8c91f24b609f7539942', 'Normal User');
+(8, 'amir', 'salman', 'amir@gmail.com', '63eefbd45d89e8c91f24b609f7539942', 'Normal User'),
+(9, 'kamran', 'ali', 'kamran@gmail.com', 'c812e5bec4e315c9cf7ba3165016bcc3', 'Tester');
 
 -- --------------------------------------------------------
 
@@ -210,6 +231,32 @@ CREATE TABLE `remanufacturing` (
 
 INSERT INTO `remanufacturing` (`id`, `product_id`, `test_id`, `remarks`, `created_at`) VALUES
 (2, 'TES3400987', 28, '\'kfkdsnfadf', '2025-06-17 14:54:04');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `retested_products`
+--
+
+CREATE TABLE `retested_products` (
+  `id` int(11) NOT NULL,
+  `product_id` varchar(50) NOT NULL,
+  `test_id` varchar(50) NOT NULL,
+  `test_type` varchar(100) NOT NULL,
+  `test_criteria` text NOT NULL,
+  `observed_output` text NOT NULL,
+  `tested_by` varchar(100) NOT NULL,
+  `test_result` enum('Passed','Failed') NOT NULL,
+  `remarks` text NOT NULL,
+  `retest_date` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `retested_products`
+--
+
+INSERT INTO `retested_products` (`id`, `product_id`, `test_id`, `test_type`, `test_criteria`, `observed_output`, `tested_by`, `test_result`, `remarks`, `retest_date`) VALUES
+(1, 'TES3400987', 'TES3-XX-0001', 'Insulation Test', 'nkk;j;', 'lm\'mln', 'umer', 'Passed', 'ml\'m\'ln', '2025-06-17 19:27:17');
 
 -- --------------------------------------------------------
 
@@ -236,8 +283,9 @@ CREATE TABLE `tests` (
 
 INSERT INTO `tests` (`id`, `test_id`, `product_id`, `test_type`, `test_criteria`, `observed_output`, `test_result`, `remarks`, `tested_by`, `tested_at`) VALUES
 (12, 'FMZ1-XX-0001', 'FMZ1400047', 'Voltage Test', 'jfafaefa', 'asdfadf', 'Passed', 'gergsddfqq', 'Umer', '2025-06-15 14:37:47'),
-(18, 'KAR1-XX-0001', 'KAR1200072', 'Capacity Test', 'kjb;vu', 'khv;ucuct', 'Passed', 'ubu;if', 'ahmad', '2025-06-16 12:02:38'),
-(28, 'TES3-XX-0001', 'TES3400987', 'Insulation Test', 'nkk;j;', 'kkfndnf', 'Failed', '\'kfkdsnfadf', 'amir', '2025-06-17 07:54:04');
+(28, 'TES3-XX-0001', 'TES3400987', 'Insulation Test', 'nkk;j;', 'kkfndnf', 'Failed', '\'kfkdsnfadf', 'amir', '2025-06-17 07:54:04'),
+(29, 'RES2-XX-0001', 'RES2300876', 'Voltage Test', 'j;iaf;dnewf', 'efwds', 'Passed', 'defdscd', 'umer', '2025-06-17 12:56:21'),
+(30, 'BlB2-XX-0001', 'BlB2300876', 'Voltage Test', 'nnfdn', 'mlkenwdld', 'Passed', 'kfelnf', 'umer', '2025-06-17 13:37:30');
 
 --
 -- Triggers `tests`
@@ -364,6 +412,12 @@ ALTER TABLE `remanufacturing`
   ADD KEY `test_id` (`test_id`);
 
 --
+-- Indexes for table `retested_products`
+--
+ALTER TABLE `retested_products`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `tests`
 --
 ALTER TABLE `tests`
@@ -379,31 +433,31 @@ ALTER TABLE `tests`
 -- AUTO_INCREMENT for table `cpri_tests`
 --
 ALTER TABLE `cpri_tests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `cpri_test_results`
 --
 ALTER TABLE `cpri_test_results`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `product_types`
 --
 ALTER TABLE `product_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `register`
 --
 ALTER TABLE `register`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `remanufacturing`
@@ -412,10 +466,16 @@ ALTER TABLE `remanufacturing`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `retested_products`
+--
+ALTER TABLE `retested_products`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `tests`
 --
 ALTER TABLE `tests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- Constraints for dumped tables

@@ -93,11 +93,19 @@
                                                         <td><?php echo $row['approved']; ?></td>
                                                        
                                                          <td>
+                                                            <?php if($row['approved'] == 'Pending') { ?>
                                                             <a href="cpri-test-form.php?prodid=<?php echo $row['id']; ?>"
                                                                 style="cursor: pointer; color: #000;">
                                                                 <i class="mdi mdi-test-tube mdi-20px" style="color: #F2125E;"></i>
                                                                 Test
                                                             </a>
+                                                            <?php }else { ?>
+                                                                 <button disabled
+                                                                style="cursor: pointer; color: #000; outline: none; border: none;">
+                                                                <i class="mdi mdi-test-tube mdi-20px" style="color:rgb(70, 70, 70);"></i>
+                                                                Tested
+                                                            </button>  
+                                                            <?php } ?>
                                                         </td>
 
 

@@ -5,7 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Lab Automation | Product</title>
+    <title>Lab Automation | Records</title>
     <!-- base:css -->
     <link rel="stylesheet" href="vendors/typicons.font/font/typicons.css">
     <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
@@ -18,7 +18,6 @@
     <link rel="icon" type="logo/png" sizes="32x32" href="logo/favicon-32x32.png">
     <link rel="icon" type="logo/png" sizes="16x16" href="logo/favicon-16x16.png">
     <link rel="manifest" href="logo/site.webmanifest">
-
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css" rel="stylesheet">
 
 </head>
@@ -30,8 +29,10 @@
         <?php
         include 'components/navBar.php';
         ?>
+
         <div class="container-fluid page-body-wrapper">
 
+            <!-- partial -->
             <!---------- sidebar --------->
             <?php
             include 'components/sideBar.php';
@@ -43,10 +44,10 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="mb-3">
-                                <h3 class="text-center mb-0 font-weight-bold">Remanufacturing Products</h3>
+                                <h3 class="text-center mb-0 font-weight-bold">Retest product Records</h3>
                             </div>
 
-                            <!-- Top Bar: Search Bar -->
+                            <!-- Top Bar: Search Bar and Add Product Button -->
                             <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
                                 <!-- Search bar -->
                                 <form class="form-inline w-50" method="GET" action="">
@@ -66,7 +67,6 @@
                                 </form>
                             </div>
 
-
                             <!-- Table -->
                             <div class="table-responsive">
                                 <?php
@@ -77,39 +77,17 @@
 
                                     $search = mysqli_real_escape_string($connect, trim($_GET['search']));
 
-                                    $sql = "SELECT 
-                                        r.id,
-                                        r.product_id,
-                                        t.test_id,
-                                        p.product_name,
-                                        t.test_type,
-                                        t.test_criteria,
-                                        t.test_result,
-                                        r.remarks 
-                                        FROM remanufacturing r
-                                        INNER JOIN tests t ON r.test_id = t.id
-                                        INNER JOIN products p ON r.product_id = p.product_id
-                                        WHERE (p.product_name LIKE '%$search%' 
-                                        OR p.product_id LIKE '%$search%' 
-                                        OR t.test_id LIKE '%$search%'
-                                        )
-                                        ORDER BY r.id DESC";
+                                    $sql = "SELECT * FROM retested_products
+                                    WHERE ( p.product_name LIKE '%$search%' 
+                                    OR test_id LIKE '%$search%'
+                                    OR product_id LIKE '%$search%'
+                                    )
+                                    ";
                                 } else {
-                                    $sql = "SELECT 
-                                        r.id,
-                                        r.product_id,
-                                        t.test_id,
-                                        p.product_name,
-                                        t.test_type,
-                                        t.test_criteria,
-                                        t.test_result,
-                                        r.remarks 
-                                        FROM remanufacturing r
-                                        INNER JOIN tests t ON r.test_id = t.id
-                                        INNER JOIN products p ON r.product_id = p.product_id
-                                        ORDER BY r.id DESC";
-
+                                    $sql = "SELECT * FROM retested_products
+                                ";
                                 }
+
 
                                 $result = mysqli_query($connect, $sql);
                                 if (mysqli_num_rows($result) > 0) {
@@ -119,14 +97,14 @@
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>Product_id</th>
+                                                <th>Product_ID</th>
                                                 <th>Test_id</th>
-                                                <th>Product_name</th>
-                                                <th>Test_type</th>
-                                                <th>Test_Criteria</th>
+                                                <th>Test_Type</th>
+                                                <th>Test_criteria</th>
+                                                <th>Observed_Output</th>
                                                 <th>Result</th>
-                                                <th>Reason</th>
-                                                <th>Retest</th>
+                                                <th>Remarks</th>
+                                                <th>Details</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -138,23 +116,19 @@
                                                     <td><?php echo $row['id']; ?></td>
                                                     <td><?php echo $row['product_id']; ?></td>
                                                     <td><?php echo $row['test_id']; ?></td>
-                                                    <td><?php echo $row['product_name']; ?></td>
                                                     <td><?php echo $row['test_type']; ?></td>
                                                     <td><?php echo $row['test_criteria']; ?></td>
+                                                    <td><?php echo $row['observed_output']; ?></td>
                                                     <td><?php echo $row['test_result']; ?></td>
                                                     <td><?php echo $row['remarks']; ?></td>
-                                                    
-                                                    <td>
-                                                      
-                                                        <a href="retest-prod-form.php?prodid=<?php echo $row['product_id']; ?> "
-                                                            style="cursor: pointer; color: #000;">
-                                                            <i class="mdi mdi-test-tube"
-                                                                style="color: #F2125E; font-size: 20px;"></i>
-                                                                Retest
-                                                        </a>
-                                                    
-                                                    </td>
 
+                                                    <td>
+                                                        <a href="retest-prod-report.php?prodid=<?php echo $row['id']; ?> "
+                                                            style="cursor: pointer; color: #000;">
+                                                            <i class="mdi mdi-open-in-new"
+                                                                style="color: #F2125E; font-size: 20px;"></i>
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                                 <?php
                                             }
@@ -174,17 +148,18 @@
 
 
                 <!------------ footer ------------>
-                <!-- <?php
-                include 'components/footer.php';
-                ?> -->
+                <?php include 'components/footer.php'; ?>
             </div>
         </div>
-
         <!-- page-body-wrapper ends -->
     </div>
     <!-- container-scroller -->
     <!-- base:js -->
     <script src="vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page-->
+    <!-- End plugin js for this page-->
+    <!-- inject:js -->
     <script src="js/off-canvas.js"></script>
     <script src="js/hoverable-collapse.js"></script>
     <script src="js/template.js"></script>
@@ -196,14 +171,7 @@
     <script src="vendors/chart.js/Chart.min.js"></script>
 
     <script src="js/dashboard.js"></script>
-    <script>
-    function confirmDelete(id) {
-        if (confirm("Are you sure you want to delete this product? This will also delete associated test data.")) {
-            window.location.href = "delete-product.php?prodid=" + id;
-        }
-    }
-</script>
-
+    <!-- End custom js for this page-->
 </body>
 
 </html>
