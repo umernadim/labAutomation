@@ -78,14 +78,14 @@
 
                                     $search = mysqli_real_escape_string($connect, trim($_GET['search']));
 
-                                    $sql = "SELECT p.id, p.product_id, p.product_name, pt.code, p.revision_code, p.manufacturing_number, p.manufactured_date, p.Uploaded_by FROM products p INNER JOIN product_types pt ON p.product_type_id = pt.id 
+                                    $sql = "SELECT p.id, p.product_id, p.product_name, pt.code, p.revision_code, p.manufacturing_number, p.manufactured_date, p.Uploaded_by, p.status FROM products p INNER JOIN product_types pt ON p.product_type_id = pt.id 
                                         WHERE (p.product_name LIKE '%$search%' 
                                         OR p.product_id LIKE '%$search%' 
                                         OR p.manufactured_date LIKE '%$search%'
                                         )
                                         ORDER BY id DESC";
                                 } else {
-                                    $sql = "SELECT p.id, p.product_id, p.product_name, pt.code, p.revision_code, p.manufacturing_number, p.manufactured_date, p.Uploaded_by FROM products p INNER JOIN product_types pt ON p.product_type_id = pt.id ORDER BY p.id DESC";
+                                    $sql = "SELECT p.id, p.product_id, p.product_name, pt.code, p.revision_code, p.manufacturing_number, p.manufactured_date, p.Uploaded_by, p.status FROM products p INNER JOIN product_types pt ON p.product_type_id = pt.id ORDER BY p.id DESC";
                                 }
 
                                 $result = mysqli_query($connect, $sql);
@@ -103,6 +103,7 @@
                                                 <th>Mfg_No.</th>
                                                 <th>Mfg_Date</th>
                                                 <th>Uploaded_By</th>
+                                                <th>Status</th>
                                                 <th>Test</th>
                                                 <th>Delete</th>
 
@@ -122,12 +123,22 @@
                                                     <td><?php echo $row['manufacturing_number']; ?></td>
                                                     <td><?php echo $row['manufactured_date']; ?></td>
                                                     <td><?php echo $row['Uploaded_by']; ?></td>
+                                                    <td><?php echo $row['status']; ?></td>
                                                     <td>
-                                                        <a href="test-product-form.php?prodid=<?php echo $row['id']; ?>"
-                                                            style="cursor: pointer;color: #000;">
-                                                            <i class="mdi mdi-test-tube mdi-20px" style="color: #F2125E;"></i>
-                                                            Test
-                                                        </a>
+                                                        <?php if ($row['status'] == 'Pending') { ?>
+                                                            <a href="test-product-form.php?prodid=<?php echo $row['id']; ?>"
+                                                                style="cursor: pointer; color: #000;">
+                                                                <i class="mdi mdi-test-tube mdi-20px" style="color: #F2125E;"></i>
+                                                                Test
+                                                            </a>
+                                                        <?php } else { ?>
+                                                            <button disabled
+                                                                style="cursor: pointer; color: #000; outline: none; border: none;">
+                                                                <i class="mdi mdi-test-tube mdi-20px"
+                                                                    style="color:rgb(70, 70, 70);"></i>
+                                                                Tested
+                                                            </button>
+                                                        <?php } ?>
                                                     </td>
                                                     <td>
                                                         <a href="javascript:void(0);"
@@ -180,12 +191,12 @@
 
     <script src="js/dashboard.js"></script>
     <script>
-    function confirmDelete(id) {
-        if (confirm("Are you sure you want to delete this product? This will also delete associated test data.")) {
-            window.location.href = "delete-product.php?prodid=" + id;
+        function confirmDelete(id) {
+            if (confirm("Are you sure you want to delete this product? This will also delete associated test data.")) {
+                window.location.href = "delete-product.php?prodid=" + id;
+            }
         }
-    }
-</script>
+    </script>
 
 </body>
 

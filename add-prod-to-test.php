@@ -95,7 +95,7 @@ if (isset($_POST['addProduct'])) {
                       placeholder="Revision Code" maxlength="3" required>
                   </div>
                   <div class="col-sm-6">
-                    <input type="text" class="form-control form-control-user" name="mfgNumber" maxlength="3"
+                    <input type="text" class="form-control form-control-user" name="mfgNumber" maxlength="4"
                       placeholder="Manufactured Number" required>
                   </div>
                 </div>

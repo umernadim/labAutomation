@@ -62,9 +62,31 @@
                                     include 'config.php';
                                     $search = isset($_GET['search']) ? mysqli_real_escape_string($connect, $_GET['search']) : '';
                                     if (!empty($search)) {
-                                        $sql = "SELECT * FROM cpri_tests WHERE product_id LIKE '%$search%' OR test_id LIKE '%$search%' ORDER BY id DESC";
+                                        $sql = "SELECT 
+                                        cpt.id,
+                                        cpt.product_id, 
+                                        p.product_name,
+                                        cpt.test_id,
+                                        cpt.sent_at,
+                                        cpt.approved
+                                        FROM products AS p
+                                        INNER JOIN cpri_tests AS cpt
+                                        WHERE cpt.product_id LIKE '%$search%' 
+                                        OR cpt.test_id LIKE '%$search%' 
+                                        OR p.product_name LIKE '%$search%'
+                                        ORDER BY id DESC";
                                     } else {
-                                        $sql = "SELECT * FROM cpri_tests ORDER BY id DESC";
+                                        $sql = "SELECT 
+                                        cpt.id,
+                                        cpt.product_id,
+                                        p.product_name,
+                                        cpt.test_id,
+                                        cpt.sent_at,
+                                        cpt.approved
+                                        FROM products AS p
+                                        INNER JOIN cpri_tests AS cpt
+                                        WHERE p.product_id = cpt.product_id
+                                        ORDER BY id DESC";
                                     }
 
 
@@ -77,6 +99,7 @@
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Product_ID</th>
+                                                    <th>Prod_Name</th>
                                                     <th>Test_ID</th>
                                                     <th>Sent_at</th>
                                                     <th>Result</th>
@@ -88,6 +111,7 @@
                                                     <tr>
                                                         <td><?php echo $row['id']; ?></td>
                                                         <td><?php echo $row['product_id']; ?></td>
+                                                        <td><?php echo $row['product_name']; ?></td>
                                                         <td><?php echo $row['test_id']; ?></td>
                                                         <td><?php echo $row['sent_at']; ?></td>
                                                         <td><?php echo $row['approved']; ?></td>

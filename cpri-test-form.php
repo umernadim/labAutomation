@@ -16,10 +16,7 @@ if (isset($_POST['submit'])) {
             $updateCPRITableQuery = "UPDATE `cpri_tests` SET `approved`='Approved' WHERE `id`= '$cpri_test_id'";
 
             mysqli_query($connect,$updateCPRITableQuery);
-
         }
-
-
 
 
         header("Location:cpri-test-records.php");

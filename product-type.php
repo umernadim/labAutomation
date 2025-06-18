@@ -80,8 +80,8 @@
                                         <table class="table table-striped">
                                             <thead>
                                                 <tr>
-                                                    <th>Product_id</th>
-                                                    <th>Product_name</th>
+                                                    <th>ID</th>
+                                                    <th>Product_Name</th>
                                                     <th>Product_Code</th>
                                                     <th>Add to Test</th>
                                                     <th>Edit</th>

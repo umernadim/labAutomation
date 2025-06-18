@@ -19,7 +19,7 @@
       <div class="collapse" id="ui-basic">
         <ul class="nav flex-column sub-menu">
           <?php 
-          if ($_SESSION["role"] === "Admin" || "Tester") {
+          if ($_SESSION["role"] !== "Normal User") {
           ?>
           <li class="nav-item"> <a class="nav-link" href="test-products.php">Test</a></li>
           <?php } ?>
@@ -37,22 +37,17 @@
       <div class="collapse" id="error">
         <ul class="nav flex-column sub-menu">
            <?php 
-          if ($_SESSION["role"] === "Admin" || "Tester") {
+          if ($_SESSION["role"] !== "Normal User") {
           ?>
           <li class="nav-item"> <a class="nav-link" href="cpri-test.php">CPRI Testing</a></li>
           <?php } ?>
-          <li class="nav-item"> <a class="nav-link" href="cpri-test-records.php">CPRI Test Records</a></li>
           <li class="nav-item"> <a class="nav-link" href="remanufacturing-prod.php">Remanufacturing_Prod</a></li>
           <li class="nav-item"> <a class="nav-link" href="retest-prod-records.php">Retested_Prod_Records</a></li>
+          <li class="nav-item"> <a class="nav-link" href="cpri-test-records.php">CPRI_Tested_Records</a></li>
         </ul>
       </div>
     </li>
-    <!-- <li class="nav-item">
-      <a class="nav-link" href="remanufacturing-prod.php">
-        <i class="typcn typcn-document-text menu-icon"></i>
-        <span class="menu-title">Remanufacturing_Prod</span>
-      </a>
-    </li> -->
+
   </ul>
 
 </nav>

@@ -73,10 +73,7 @@
 
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-md-6">
-                                                <h5 class="font-weight-bold">Product Name:</h5>
-                                                <p><?= $row['product_name'] ?></p>
-                                            </div>
+                                            
                                             <div class="col-md-6">
                                                 <h5 class="font-weight-bold">Product ID:</h5>
                                                 <p><?= $row['product_id'] ?></p>
@@ -84,6 +81,10 @@
                                             <div class="col-md-6">
                                                 <h5 class="font-weight-bold">Product Testing ID:</h5>
                                                 <p><?= $row['test_id'] ?></p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="font-weight-bold">Product Name:</h5>
+                                                <p><?= $row['product_name'] ?></p>
                                             </div>
                                             <div class="col-md-6">
                                                 <h5 class="font-weight-bold">Mfg At:</h5>
@@ -115,12 +116,12 @@
                                                 <p><?= $row['observed_output'] ?></p>
                                             </div>
                                             <div class="col-md-6">
-                                                <h5 class="font-weight-bold">Test Result:</h5>
-                                                <p><?= $row['test_result'] ?></p>
-                                            </div>
-                                            <div class="col-md-6">
                                                 <h5 class="font-weight-bold">Remarks:</h5>
                                                 <p><?= $row['remarks'] ?></p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="font-weight-bold">Test Result:</h5>
+                                                <p><?= $row['test_result'] ?></p>
                                             </div>
                                             <div class="col-md-12 mt-4">
                                                 <button class="btn btn-info no-print" id="generatePDF">

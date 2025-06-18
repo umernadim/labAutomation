@@ -14,14 +14,18 @@ if (isset($_POST['submit'])) {
 
     if (mysqli_query($connect, $sql)) {
         header("Location:test-record.php");
+
+        if($test_result === 'Passed' || 'Failed'){
+            $updateProductableQuery = "UPDATE `products` SET `status`='tested' WHERE `product_id`= '$product_id'";
+            mysqli_query($connect,$updateProductableQuery);
+        }
+
     } else {
         echo "<p style='color: red; text-align:center;'>Failed to submit test. Error: " . mysqli_error($connect) . "</p>";
-
     }
 
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">

@@ -26,7 +26,7 @@ if (!isset($_SESSION['email'])) {
         </a>
       </li>
       <?php
-      if ($_SESSION["role"] === "Admin" || "Tester") {
+      if ($_SESSION["role"] !== "Normal User") {
         ?>
         <?php
         if ($_SESSION["role"] !== "Tester") {

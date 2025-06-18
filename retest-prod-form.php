@@ -17,7 +17,7 @@ if (isset($_POST['submit'])) {
     $sql .= "INSERT INTO cpri_tests(product_id, test_id) VALUES ('$product_id', '$test_id')";
 
     if (mysqli_multi_query($connect, $sql)) {
-        header("Location: cpri-test-records.php");
+        header("Location: cpri-test.php");
         exit;
     } else {
         echo "<p style='color: red; text-align:center;'>Failed to submit test. Error: " . mysqli_error($connect) . "</p>";
